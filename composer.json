@@ -1,0 +1,10 @@
+{
+    "name": "valentina/microframework",
+    "authors": [
+        {
+            "name": "Ariss",
+            "email": "valentina.ways@yandex.ru"
+        }
+    ],
+    "require": {}
+}
