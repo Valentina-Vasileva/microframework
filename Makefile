@@ -3,7 +3,7 @@ start:
 install:
 	composer install
 lint:
-	composer phpcs public src
+	composer phpcs
 
 lint-fix:
-	composer phpcbf public src
+	composer phpcbf
