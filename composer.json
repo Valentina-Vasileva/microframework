@@ -6,5 +6,11 @@
             "email": "valentina.ways@yandex.ru"
         }
     ],
-    "require": {}
+    "require": {
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "scripts": {
+        "phpcs": "phpcs",
+        "phpcbf": "phpcbf"
+    }
 }
