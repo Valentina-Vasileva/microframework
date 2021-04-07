@@ -12,6 +12,10 @@ $app->get('/', function () {
     return render('index');
 });
 
+$app->get('/companies/:id', function ($params, $args) {
+    return json_encode($args);
+});
+
 $app->get('/companies', function () {
     return 'companies list';
 });

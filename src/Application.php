@@ -8,12 +8,12 @@ class Application implements ApplicationInterface
 
     public function get($path, $handler)
     {
-        $this->handlers[] = ['GET', $path, $handler];
+        $this->append('GET', $path, $handler);
     }
 
     public function post($path, $handler)
     {
-        $this->handlers[] = ['POST', $path, $handler];
+        $this->append('POST', $path, $handler);
     }
 
     public function run()
@@ -23,13 +23,30 @@ class Application implements ApplicationInterface
 
         foreach ($this->handlers as $item) {
             [$handlerMethod, $path, $handler] = $item;
-            $preparedPath = preg_quote($path, '/');
-            if ($method === $handlerMethod && preg_match("/^$preparedPath$/i", $uri)) {
-                echo $handler($_GET);
+            $preparedPath = str_replace('/', '\/', $path);
+            $matches = [];
+            if ($method === $handlerMethod && preg_match("/^$preparedPath$/i", $uri, $matches)) {
+                $arguments = array_filter($matches, function ($key) {
+                    return !is_numeric($key);
+                }, ARRAY_FILTER_USE_KEY);
+                echo $handler($_GET, $arguments);
                 return;
             }
         }
         echo 'Not found';
         return;
+    }
+
+    private function append($method, $path, $handler)
+    {
+        $updatedPath = $path;
+        $matches = [];
+        if (preg_match_all('/:([\w-]+)/', $path, $matches)) {
+            $updatedPath = array_reduce($matches[1], function ($acc, $value) {
+                $group = "(?P<$value>[\w-]+)";
+                return str_replace(":{$value}", $group, $acc);
+            }, $path);
+        }
+        $this->handlers[] = [$method, $updatedPath, $handler];
     }
 }
