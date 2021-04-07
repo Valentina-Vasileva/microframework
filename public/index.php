@@ -16,4 +16,8 @@ $app->get('/companies', function () {
     return 'companies list';
 });
 
+$app->get('/about', function ($params) {
+    return json_encode($params);
+});
+
 $app->run();

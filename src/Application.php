@@ -18,14 +18,14 @@ class Application implements ApplicationInterface
 
     public function run()
     {
-        $uri = $_SERVER['REQUEST_URI'];
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
 
         foreach ($this->handlers as $item) {
             [$handlerMethod, $path, $handler] = $item;
             $preparedPath = preg_quote($path, '/');
             if ($method === $handlerMethod && preg_match("/^$preparedPath$/i", $uri)) {
-                echo $handler();
+                echo $handler($_GET);
                 return;
             }
         }
