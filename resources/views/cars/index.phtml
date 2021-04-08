@@ -12,22 +12,19 @@
             <tr>
                 <td>id</td>
                 <td>Model</td>
-                <td>Year</td>
-                <td>Actions</td>
+                <td>Pictures</td>
             </tr>
 
             <?php foreach ($cars as $car) : ?>
-            <tr class="tr">
-                <td><?= $car['id'] ?></td>
-                <td><?= $car['model'] ?></td>
-                <td><?= $car['year'] ?></td>
-                <td>
-                    <form class="form" action="/cars/<?= $car['id'] ?>" method="post">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="submit" name="" value="remove">
-                    </form>
-                </td>
-            </tr>
+                <tr class="tr">
+                    <td><?= $car['id'] ?></td>
+                    <td><?= $car['model'] ?></td>
+                    <td>
+                        <?php foreach ($car['pictures'] as $picture) : ?>
+                        <img width="100px" src="/public/images/<?= $picture['name'] ?>" />
+                        <?php endforeach ?>
+                    </td>
+                </tr>
             <?php endforeach ?>
         </table>
     </body>

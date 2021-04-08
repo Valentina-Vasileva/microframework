@@ -13,8 +13,10 @@ $opt = array(
 );
 
 $pdo = new \PDO('sqlite:db.sqlite', null, null, $opt);
-
 $pdo->exec('create table if not exists cars (id integer primary key autoincrement, model text not null, year text)');
+$pdo->exec(
+    'create table if not exists car_pictures (id integer primary key autoincrement, car_id integer not null, name text)'
+);
 
 $repository = new CarRepository($pdo);
 
@@ -58,16 +60,39 @@ $app->get('/cars/new', function () use ($newCar) {
 $app->post('/cars', function ($params, $attributes) use ($repository) {
     $car = $params['car'];
     $errors = [];
+    $pictures = [];
 
     if (!$car['model']) {
         $errors['model'] = "model can't be blank";
     }
-    if (!$car['year']) {
-        $errors['year'] = "year can't be blank";
+
+    if (array_key_exists('car', $_FILES)) {
+        $files = $_FILES['car'];
+        $key = 'pictures';
+        $errorCodes = $files['error'][$key];
+        foreach ($errorCodes as $errorCode) {
+            if ($errorCode !== UPLOAD_ERR_NO_FILE && $errorCode !== UPLOAD_ERR_OK) {
+                $errors[$key] = 'smth wrong with pictures';
+            }
+        }
+    }
+
+    if (!array_key_exists($key, $errors)) {
+        foreach ($files['tmp_name'][$key] as $index => $tmpName) {
+            if ($files['error'][$key][$index] === UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+            $newFileName = implode(DIRECTORY_SEPARATOR, [__DIR__, 'images', basename($tmpName)]);
+            if (move_uploaded_file($tmpName, $newFileName)) {
+                $pictures[] = ['name' => basename($tmpName)];
+            } else {
+                $errors[$key] = 'smth wrong with pictures moving';
+            }
+        }
     }
 
     if (empty($errors)) {
-        $repository->insert($car);
+        $repository->insert($car, $pictures);
         return response()->redirect('/cars');
     }
     return response(render('cars/new', ['errors' => $errors, 'car' => $car]))->withStatus(422);

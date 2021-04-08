@@ -8,11 +8,11 @@
         </div>
 
         <br>
-        
-        <form action="/cars" method="post">
+
+        <form enctype="multipart/form-data" action="/cars" method="post">
             <div>
                 <b>Model</b>
-                <input type="text" name="car[model]" value="<?= htmlspecialchars($car['model'] ?? '') ?>">
+                <input type="text" name="car[model]" value="<?= $car['model'] ?>">
                 <?php if (isset($errors['model'])) : ?>
                     <div style="color: red"><?= $errors['model'] ?></div>
                 <?php endif ?>
@@ -21,12 +21,17 @@
             <br>
 
             <div>
-                Year
-                <input type="number" name="car[year]" value="<?= htmlspecialchars($car['year'] ?? '') ?>">
+                Pictures<br><br>
+                <?php if (isset($errors['pictures'])) : ?>
+                    <div style="color: red"><?= $errors['pictures'] ?></div>
+                <?php endif ?>
+                <input type="file" name="car[pictures][]"><br>
+                <input type="file" name="car[pictures][]">
             </div><br>
             <div>
                 <input type="submit">
             </div>
         </form>
+
     </body>
 </html>
