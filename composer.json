@@ -12,6 +12,7 @@
     "autoload": {
         "psr-4": {"App\\": "src/"},
         "files": [
+            "src/Response.php",
             "src/Renderer.php",
             "src/Template.php"
         ]

@@ -29,7 +29,12 @@ class Application implements ApplicationInterface
                 $arguments = array_filter($matches, function ($key) {
                     return !is_numeric($key);
                 }, ARRAY_FILTER_USE_KEY);
-                echo $handler($_GET, $arguments);
+                $response = $handler(array_merge($_GET, $_POST), $arguments);
+                http_response_code($response->getStatusCode());
+                foreach ($response->getHeaderLines() as $header) {
+                    header($header);
+                }
+                echo $response->getBody();
                 return;
             }
         }
