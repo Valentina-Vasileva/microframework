@@ -16,10 +16,20 @@ class Application implements ApplicationInterface
         $this->append('POST', $path, $handler);
     }
 
+    public function delete($path, $handler)
+    {
+        $this->append('DELETE', $path, $handler);
+    }
+
     public function run()
     {
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $method = $_SERVER['REQUEST_METHOD'];
+
+        if ($_SERVER['REQUEST_METHOD'] === "POST" && array_key_exists('_method', $_POST)) {
+            $method = strtoupper($_POST['_method']);
+        } else {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
 
         foreach ($this->handlers as $item) {
             [$handlerMethod, $path, $handler] = $item;

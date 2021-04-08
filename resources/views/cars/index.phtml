@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Cars</h1>
+        <div>
+            <a class="new-car" href="/cars/new">add new</a>
+        </div>
+
+        <br>
+
+        <table border="1" style="border-collapse: collapse;">
+            <tr>
+                <td>id</td>
+                <td>Model</td>
+                <td>Year</td>
+                <td>Actions</td>
+            </tr>
+
+            <?php foreach ($cars as $car) : ?>
+            <tr class="tr">
+                <td><?= $car['id'] ?></td>
+                <td><?= $car['model'] ?></td>
+                <td><?= $car['year'] ?></td>
+                <td>
+                    <form class="form" action="/cars/<?= $car['id'] ?>" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="submit" name="" value="remove">
+                    </form>
+                </td>
+            </tr>
+            <?php endforeach ?>
+        </table>
+    </body>
+</html>
