@@ -6,9 +6,6 @@
             "email": "valentina.ways@yandex.ru"
         }
     ],
-    "require": {
-        "squizlabs/php_codesniffer": "^3.5"
-    },
     "autoload": {
         "psr-4": {"App\\": "src/"},
         "files": [
@@ -20,5 +17,8 @@
     "scripts": {
         "phpcs": "phpcs",
         "phpcbf": "phpcbf"
+    },
+    "require": {
+        "squizlabs/php_codesniffer": "^3.6"
     }
 }
