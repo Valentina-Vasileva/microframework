@@ -39,7 +39,14 @@ class Application implements ApplicationInterface
                 $arguments = array_filter($matches, function ($key) {
                     return !is_numeric($key);
                 }, ARRAY_FILTER_USE_KEY);
-                $response = $handler(array_merge($_GET, $_POST), $arguments);
+
+                $meta = [
+                    'method' => $method,
+                    'uri' => $uri,
+                    'headers' => getallheaders()
+                ];
+
+                $response = $handler(array_merge($_GET, $_POST), $arguments, $meta);
                 http_response_code($response->getStatusCode());
                 foreach ($response->getHeaderLines() as $header) {
                     header($header);
