@@ -12,7 +12,7 @@ $opt = array(
     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
 );
 
-$pdo = new \PDO('sqlite:db.sqlite', null, null, $opt);
+$pdo = new \PDO('sqlite:../db.sqlite', null, null, $opt);
 $pdo->exec('create table if not exists cars (id integer primary key autoincrement, model text not null, year text)');
 $pdo->exec(
     'create table if not exists car_pictures (id integer primary key autoincrement, car_id integer not null, name text)'
