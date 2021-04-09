@@ -22,8 +22,10 @@ $repository = new CarRepository($pdo);
 
 $app = new Application();
 
-$app->get('/', function () {
-    return response(render('index'));
+$app->get('/', function ($params, $args, $cookies, $session) {
+    $session->start();
+    $nickname = $session->get('nickname');
+    return response(render('index', ['nickname' => $nickname]));
 });
 
 $app->get('/companies/:id', function ($params, $args) {
@@ -106,6 +108,22 @@ $app->delete('/cars/:id', function ($params, $attributes) use ($repository) {
     $id = $attributes['id'];
     $repository->delete($id);
     return response()->redirect('/cars');
+});
+
+$app->get('/session/new', function () {
+    return response(render('session/new'));
+});
+
+
+$app->post('/session', function ($params, $args, $cookies, $session) {
+    $session->start();
+    $session->set('nickname', $params['nickname']);
+    return response()->redirect('/');
+});
+
+$app->delete('/session', function ($params, $args, $cookies, $session) {
+    $session->destroy();
+    return response()->redirect('/');
 });
 
 $app->run();

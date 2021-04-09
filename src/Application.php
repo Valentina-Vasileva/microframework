@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Session;
+
 class Application implements ApplicationInterface
 {
     private $handlers = [];
@@ -45,8 +47,8 @@ class Application implements ApplicationInterface
                     'uri' => $uri,
                     'headers' => getallheaders()
                 ];
-
-                $response = $handler(array_merge($_GET, $_POST), $arguments, $_COOKIE, $meta);
+                $session = new Session();
+                $response = $handler(array_merge($_GET, $_POST), $arguments, $_COOKIE, $session, $meta);
                 http_response_code($response->getStatusCode());
                 foreach ($response->getHeaderLines() as $header) {
                     header($header);
