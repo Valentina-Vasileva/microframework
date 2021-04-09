@@ -30,8 +30,12 @@ $app->get('/companies/:id', function ($params, $args) {
     return response(json_encode($args));
 });
 
-$app->get('/companies', function () {
-    return response('companies list');
+$app->get('/setcookies', function ($params, $args, $cookies) {
+    return response()->withCookie('mycookie', 'is perfect')->redirect('/companies');
+});
+
+$app->get('/companies', function ($params, $args, $cookies) {
+    return response(json_encode($cookies));
 });
 
 $app->get('/about', function ($params) {

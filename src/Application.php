@@ -46,10 +46,13 @@ class Application implements ApplicationInterface
                     'headers' => getallheaders()
                 ];
 
-                $response = $handler(array_merge($_GET, $_POST), $arguments, $meta);
+                $response = $handler(array_merge($_GET, $_POST), $arguments, $_COOKIE, $meta);
                 http_response_code($response->getStatusCode());
                 foreach ($response->getHeaderLines() as $header) {
                     header($header);
+                }
+                foreach ($response->getCookies() as $key => $value) {
+                    setcookie($key, $value);
                 }
                 echo $response->getBody();
                 return;
