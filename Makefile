@@ -1,5 +1,5 @@
 start:
-	php -S localhost:8000 public/index.php
+	php -S localhost:8000
 install:
 	composer install
 lint:
